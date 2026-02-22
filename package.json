@@ -1,0 +1,47 @@
+{
+  "name": "deploybase",
+  "version": "0.1.0",
+  "description": "Compare GPU pricing, LLM models, and MLops tools from your terminal",
+  "type": "module",
+  "bin": {
+    "deploybase": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "jiti src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "citty": "^0.1.6",
+    "ofetch": "^1.4.1",
+    "chalk": "^5.4.1",
+    "tty-table": "^4.2.3",
+    "ora": "^8.1.1"
+  },
+  "devDependencies": {
+    "unbuild": "^3.3.1",
+    "jiti": "^2.4.2",
+    "typescript": "^5.0.0",
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deploybase/deploybase-cli"
+  },
+  "keywords": [
+    "gpu",
+    "cloud",
+    "pricing",
+    "llm",
+    "mlops",
+    "cli",
+    "deploybase"
+  ]
+}
