@@ -209,7 +209,7 @@ export function renderTable(columns: Column[], rows: string[][]): string {
     head: scaled.map((col) => col.alias || col.value),
     colWidths: scaled.map((col) => (col.width || 10) + 2),
     colAligns: scaled.map((col) => col.align || "left"),
-    wordWrap: false,
+    wordWrap: true,
     style: {
       head: ["bold"],
       border: ["grey"],
