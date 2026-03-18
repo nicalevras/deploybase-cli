@@ -2,7 +2,7 @@
 
 Search and compare GPU and LLM pricing from your terminal. Data from [deploybase.ai](https://deploybase.ai).
 
-![deploybase CLI](https://raw.githubusercontent.com/deploybase/deploybase-cli/main/assets/hero.png)
+![deploybase CLI](https://raw.githubusercontent.com/nicalevras/deploybase-cli/main/assets/hero.png)
 
 ## Install
 
@@ -37,7 +37,7 @@ Browse GPU pricing and availability across cloud providers.
 deploybase gpu
 ```
 
-![GPU pricing table](https://raw.githubusercontent.com/deploybase/deploybase-cli/main/assets/gpu.png)
+![GPU pricing table](https://raw.githubusercontent.com/nicalevras/deploybase-cli/main/assets/gpu.png)
 
 ### Filter by provider
 
@@ -81,7 +81,7 @@ Browse LLM pricing and availability across providers.
 deploybase llm
 ```
 
-![LLM pricing table](https://raw.githubusercontent.com/deploybase/deploybase-cli/main/assets/llm.png)
+![LLM pricing table](https://raw.githubusercontent.com/nicalevras/deploybase-cli/main/assets/llm.png)
 
 ### Filter by provider
 
@@ -159,7 +159,7 @@ All pricing data comes from [deploybase.ai](https://deploybase.ai) and is update
 ## Contributing
 
 ```bash
-git clone https://github.com/deploybase/deploybase-cli.git
+git clone https://github.com/nicalevras/deploybase-cli.git
 cd deploybase-cli
 pnpm install
 pnpm dev
