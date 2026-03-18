@@ -1,5 +1,5 @@
 {
-  "name": "deploybase",
+  "name": "deploybase-cli",
   "version": "0.1.0",
   "description": "Search and compare GPU and LLM pricing from your terminal",
   "type": "module",

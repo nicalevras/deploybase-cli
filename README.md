@@ -7,13 +7,13 @@ Search and compare GPU and LLM pricing from your terminal. Data from [deploybase
 ## Install
 
 ```bash
-npm install -g deploybase
+npm install -g deploybase-cli
 ```
 
 Or run it without installing:
 
 ```bash
-npx deploybase
+npx deploybase-cli
 ```
 
 Requires Node.js 18+.
