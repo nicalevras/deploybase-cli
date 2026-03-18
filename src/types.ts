@@ -1,10 +1,16 @@
 // ── API Response Envelope ────────────────────────────────────────────
 
+export interface FacetRow {
+  value: string;
+  total: number;
+}
+
 export interface ApiResponse<T> {
   data: T[];
   meta: {
     totalRowCount: number;
     filterRowCount: number;
+    facets?: Record<string, { rows: FacetRow[] }>;
   };
   prevCursor: number | null;
   nextCursor: number | null;
@@ -49,17 +55,3 @@ export interface LLM {
   scrapedAt: string;
 }
 
-// ── MLops Tool Types ─────────────────────────────────────────────────
-
-export interface Tool {
-  id: string;
-  name: string | null;
-  developer: string | null;
-  description: string | null;
-  category: string | null;
-  price: string | null;
-  license: string | null;
-  url: string | null;
-  stack: string | null;
-  oss: string | null;
-}

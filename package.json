@@ -1,7 +1,7 @@
 {
   "name": "deploybase",
   "version": "0.1.0",
-  "description": "Compare GPU pricing, LLM models, and MLops tools from your terminal",
+  "description": "Search and compare GPU and LLM pricing from your terminal",
   "type": "module",
   "bin": {
     "deploybase": "./dist/index.mjs"
@@ -14,18 +14,24 @@
     "dev": "jiti src/index.ts",
     "prepublishOnly": "npm run build"
   },
+  "author": "Deploybase <contact@mail.deploybase.ai> (https://deploybase.ai)",
+  "homepage": "https://deploybase.ai",
+  "bugs": {
+    "url": "https://github.com/deploybase/deploybase-cli/issues"
+  },
   "dependencies": {
-    "citty": "^0.1.6",
-    "ofetch": "^1.4.1",
     "chalk": "^5.4.1",
-    "tty-table": "^4.2.3",
+    "citty": "^0.1.6",
+    "cli-table3": "^0.6.5",
+    "ofetch": "^1.4.1",
     "ora": "^8.1.1"
   },
   "devDependencies": {
-    "unbuild": "^3.3.1",
+    "@types/node": "^22.0.0",
+    "dotenv": "^17.3.1",
     "jiti": "^2.4.2",
     "typescript": "^5.0.0",
-    "@types/node": "^22.0.0"
+    "unbuild": "^3.3.1"
   },
   "engines": {
     "node": ">=18"
@@ -37,11 +43,25 @@
   },
   "keywords": [
     "gpu",
+    "gpu-pricing",
+    "cloud-gpu",
+    "llm",
+    "llm-pricing",
+    "ai",
+    "machine-learning",
+    "mlops",
     "cloud",
     "pricing",
-    "llm",
-    "mlops",
+    "compare",
     "cli",
-    "deploybase"
+    "terminal",
+    "deploybase",
+    "h100",
+    "a100",
+    "inference",
+    "nvidia",
+    "amd",
+    "cuda",
+    "pytorch"
   ]
 }

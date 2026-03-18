@@ -1,12 +1,18 @@
 import { defineCommand } from "citty";
+import chalk from "chalk";
 import ora from "ora";
 import { fetchGPUs } from "../client.js";
 import type { GPU } from "../types.js";
 import {
+  phosphor,
+  bouncingBar,
+  formatProvider,
   formatPrice,
   formatVram,
   formatNumber,
   formatValue,
+  resolveGpuProvider,
+  resolveGpuType,
   renderTable,
   renderSummary,
   renderEmpty,
@@ -21,81 +27,31 @@ export default defineCommand({
   args: {
     provider: {
       type: "string",
-      description: "Filter by provider(s), comma-separated (e.g. coreweave,lambda)",
+      description: "Filter by provider (e.g. lambda, coreweave)",
     },
-    gpu: {
+    model: {
       type: "string",
-      description: "Filter by GPU model(s), comma-separated (e.g. H100,A100)",
+      description: "Filter by GPU model (e.g. H100, A100)",
     },
     type: {
       type: "string",
       description: "Filter by type (VM, Bare Metal)",
     },
-    "vram-min": {
-      type: "string",
-      description: "Minimum VRAM in GB",
-    },
-    "vram-max": {
-      type: "string",
-      description: "Maximum VRAM in GB",
-    },
-    "price-max": {
-      type: "string",
-      description: "Maximum price per hour in USD",
-    },
     search: {
       type: "string",
       description: "Full-text search",
     },
-    sort: {
-      type: "string",
-      description: "Sort field.direction (e.g. price_hour_usd.asc)",
-      default: "price_hour_usd.asc",
-    },
-    limit: {
-      type: "string",
-      description: "Number of results to show",
-      default: "25",
-    },
-    all: {
-      type: "boolean",
-      description: "Fetch all pages of results",
-      default: false,
-    },
-    json: {
-      type: "boolean",
-      description: "Output raw JSON",
-      default: false,
-    },
   },
   async run({ args }) {
-    const spinner = ora("Fetching GPU pricing...").start();
+    const spinner = ora({ text: phosphor("Fetching GPU pricing..."), spinner: bouncingBar, discardStdin: false }).start();
 
     try {
-      // Build vram_gb slider param (min-max)
-      let vramParam: string | undefined;
-      if (args["vram-min"] || args["vram-max"]) {
-        const min = args["vram-min"] || "";
-        const max = args["vram-max"] || "";
-        vramParam = `${min}-${max}`;
-      }
-
-      // Build price slider param
-      let priceParam: string | undefined;
-      if (args["price-max"]) {
-        priceParam = `-${args["price-max"]}`;
-      }
-
       const result = await fetchGPUs({
-        provider: args.provider?.replace(/,/g, ","),
-        gpu_model: args.gpu?.replace(/,/g, ","),
-        type: args.type,
-        vram_gb: vramParam,
-        price_hour_usd: priceParam,
+        provider: args.provider ? resolveGpuProvider(args.provider) : undefined,
+        gpu_model: args.model,
+        type: args.type ? resolveGpuType(args.type) : undefined,
         search: args.search,
-        sort: args.sort,
-        size: parseInt(args.limit, 10),
-        all: args.all,
+        sort: "price_hour_usd.asc",
       });
 
       spinner.stop();
@@ -105,31 +61,26 @@ export default defineCommand({
         return;
       }
 
-      if (args.json) {
-        console.log(JSON.stringify(result.data, null, 2));
-        return;
-      }
-
       const columns = [
-        { value: "Provider", width: 14 },
-        { value: "GPU", width: 12 },
-        { value: "Cnt", width: 5, align: "right" as const },
-        { value: "VRAM", width: 8, align: "right" as const },
-        { value: "vCPUs", width: 7, align: "right" as const },
-        { value: "RAM", width: 8, align: "right" as const },
-        { value: "$/hr", width: 10, align: "right" as const },
-        { value: "Type", width: 12 },
+        { value: "Provider", width: 16 },
+        { value: "Model", width: 20 },
+        { value: "GPUs", width: 10, align: "center" as const },
+        { value: "VRAM", width: 10, align: "center" as const },
+        { value: "vCPUs", width: 8, align: "center" as const },
+        { value: "RAM", width: 10, align: "center" as const },
+        { value: "Price", width: 12, align: "center" as const },
+        { value: "Type", width: 10, align: "center" as const },
       ];
 
       const rows = result.data.map((row: GPU) => [
-        formatValue(row.provider),
+        formatProvider(row.provider),
         formatValue(row.gpu_model),
         formatNumber(row.gpu_count),
         formatVram(row.vram_gb),
         formatNumber(row.vcpus),
-        row.system_ram_gb ? `${row.system_ram_gb} GB` : "—",
+        row.system_ram_gb ? `${row.system_ram_gb} GB` : chalk.dim("—"),
         formatPrice(row.price_hour_usd),
-        formatValue(row.type),
+        formatValue(row.type === "Virtual Machine" ? "VM" : row.type === "Bare Metal" ? "BM" : row.type),
       ]);
 
       console.log(renderTable(columns, rows));
@@ -138,7 +89,7 @@ export default defineCommand({
       spinner.stop();
       const message = error instanceof Error ? error.message : String(error);
       console.error(renderError(message));
-      process.exit(1);
+      if (!process.env.__DEPLOYBASE_REPL) process.exit(1);
     }
   },
 });
